@@ -54,7 +54,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return None
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
-    server_address = ('', PORT)  
+    server_address = ('', int(PORT))  
     httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
 
