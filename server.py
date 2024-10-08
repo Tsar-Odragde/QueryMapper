@@ -1,11 +1,12 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse as urlparse
 import requests
+import os
 
-
-CLIENT_ID = 'YOUR_CLIENT_ID'
-CLIENT_SECRET = 'YOUR_CLIENT_SECRET'
-REDIRECT_URI = 'REDIRECT_URI'
+CLIENT_ID = os.environ['YOUR_CLIENT_ID']
+CLIENT_SECRET = os.environ['YOUR_CLIENT_SECRET']
+REDIRECT_URI = os.environ['REDIRECT_URI']
+PORT = os.environ['PORT']
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -53,9 +54,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return None
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
-    server_address = ('', 3000)  
+    server_address = ('', PORT)  
     httpd = server_class(server_address, handler_class)
-    print("Starting server on http://localhost:3000...")
     httpd.serve_forever()
 
 if __name__ == "__main__":
