@@ -2,24 +2,20 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse as urlparse
 import requests
 
-# Replace these with your own credentials
+
 CLIENT_ID = 'YOUR_CLIENT_ID'
 CLIENT_SECRET = 'YOUR_CLIENT_SECRET'
-REDIRECT_URI = 'http://localhost:3000/callback'
+REDIRECT_URI = 'REDIRECT_URI'
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Parse the path and query parameters
         parsed_path = urlparse.urlparse(self.path)
         if parsed_path.path == "/callback":
-            # Extract query parameters
             query = urlparse.parse_qs(parsed_path.query)
             code = query.get("code", [None])[0]
             
             if code:
-                # Exchange code for access token
                 token_response = self.exchange_code_for_token(code)
-                # Respond to the user
                 if token_response:
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
@@ -39,10 +35,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(b"Path not found.")
     
     def exchange_code_for_token(self, code):
-        # Define the token endpoint
         token_url = "https://api.mercadolibre.com/oauth/token"
         
-        # Prepare the data payload
         payload = {
             'grant_type': 'authorization_code',
             'client_id': CLIENT_ID,
@@ -51,7 +45,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             'redirect_uri': REDIRECT_URI
         }
         
-        # Make the POST request to exchange the code for an access token
         response = requests.post(token_url, data=payload)
         if response.status_code == 200:
             return response.text  # Return the access token JSON response
@@ -60,7 +53,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return None
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
-    server_address = ('', 3000)  # Listen on port 3000
+    server_address = ('', 3000)  
     httpd = server_class(server_address, handler_class)
     print("Starting server on http://localhost:3000...")
     httpd.serve_forever()
