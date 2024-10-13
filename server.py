@@ -47,25 +47,38 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(b"Path not found.")
     
     # Method to exchange the authorization code for an access token
-    def exchange_code_for_token(self, code):
-        token_url = "https://api.mercadolibre.com/oauth/token"  # MercadoLibre token URL
+    def exchange_code_for_token(self, code=None, refresh_token=None):
+        token_url = "https://api.mercadolibre.com/oauth/token"
         
-        # Prepare the payload for the POST request to obtain the token
-        payload = {
-            'grant_type': 'authorization_code',
-            'client_id': CLIENT_ID,
-            'client_secret': CLIENT_SECRET,
-            'code': code,
-            'redirect_uri': REDIRECT_URI
-        }
+        # Prepare payload for either authorization code exchange or refresh token
+        if code:
+            payload = {
+                'grant_type': 'authorization_code',
+                'client_id': CLIENT_ID,
+                'client_secret': CLIENT_SECRET,
+                'code': code,
+                'redirect_uri': REDIRECT_URI
+            }
+        elif refresh_token:
+            payload = {
+                'grant_type': 'refresh_token',
+                'client_id': CLIENT_ID,
+                'client_secret': CLIENT_SECRET,
+                'refresh_token': refresh_token
+            }
+        else:
+            print("Error: Either code or refresh_token must be provided.")
+            return None
         
-        # Send a POST request to the token endpoint with the payload
+        # Send POST request to get access token or refresh token
         response = requests.post(token_url, data=payload)
+        
+        # Check if the request was successful
         if response.status_code == 200:
-            return response.text  # Return the access token JSON response if successful
+            return response.json()  # Return JSON response with the token information
         else:
             print(f"Error: {response.status_code} - {response.text}")
-            return None  # Return None if there's an error
+            return None
 
 # Function to start the server and listen for incoming requests on the specified port
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
