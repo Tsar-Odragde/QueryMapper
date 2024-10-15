@@ -75,7 +75,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         
         # Check if the request was successful
         if response.status_code == 200:
-            return response.json()  # Return JSON response with the token information
+            return response.text  # Return JSON response with the token information
         else:
             print(f"Error: {response.status_code} - {response.text}")
             return None
