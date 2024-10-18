@@ -22,6 +22,5 @@ services:
   - key: YOUR_CLIENT_ID
     sync: false
   region: ohio
-  startCommand: "gunicorn server:app --bind 0.0.0.0:3000"
   autoDeploy: false
 version: "1"
