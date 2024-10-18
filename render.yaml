@@ -1,28 +1,29 @@
+# Exported from Render on 2024-10-18T03:18:39Z
 services:
 - type: web
   name: QueryMapper
-  env: docker
+  runtime: docker
   plan: free
-  dockerfilePath: ./Dockerfile
-  autoDeploy: false
-  healthCheckPath: "/"
+  envVars:
+  - key: SQL_PASSWORD
+    sync: false
+  - key: SQL_USER
+    sync: false
+  - key: SQL_DATABASE
+    sync: false
+  - key: SQL_SERVER
+    sync: false
+  - key: REDIRECT_URI
+    sync: false
+  - key: PORT
+    sync: false
+  - key: YOUR_CLIENT_SECRET
+    sync: false
+  - key: YOUR_CLIENT_ID
+    sync: false
+  region: ohio
   build:
     noCache: true
   startCommand: "gunicorn server:app --bind 0.0.0.0:3000"
-  envVars:
-- key: SQL_PASSWORD
-  sync: false
-- key: SQL_USER
-  sync: false
-- key: SQL_DATABASE
-  sync: false
-- key: SQL_SERVER
-  sync: false
-- key: REDIRECT_URI
-  sync: false
-- key: PORT
-  sync: false
-- key: YOUR_CLIENT_SECRET
-  sync: false
-- key: YOUR_CLIENT_ID
-  sync: false
+  autoDeploy: false
+version: "1"
