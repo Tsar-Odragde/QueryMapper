@@ -1,11 +1,15 @@
-# Exported from Render on 2024-10-18T03:18:39Z
 services:
-- type: web
-  name: QueryMapper
-  runtime: python
-  repo: https://github.com/Tsar-Odragde/QueryMapper
-  plan: free
-  envVars:
+  - type: web
+    name: QueryMapper
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: false
+    healthCheckPath: "/"
+    build:
+      noCache: true
+    startCommand: "gunicorn server:app --bind 0.0.0.0:3000"
+    envVars:
   - key: SQL_PASSWORD
     sync: false
   - key: SQL_USER
@@ -22,13 +26,3 @@ services:
     sync: false
   - key: YOUR_CLIENT_ID
     sync: false
-  region: ohio
-  buildCommand: |
-      apt-get update &&
-      curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - &&
-      curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list &&
-      apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql17 &&
-      pip install -r requirements.txt
-  startCommand: gunicorn server:app
-  autoDeploy: false
-version: "1"
