@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO)
 # Database connection details using environment variables
 try:
     conn = pyodbc.connect(
-        'DRIVER={ODBC Driver 18 for SQL Server};'
+        'DRIVER={ODBC Driver 17 for SQL Server};'
         'SERVER=' + SERVER + ';'
         'DATABASE=' + DB_NAME + ';'
         'UID=' + DB_USER + ';'
