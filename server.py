@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 import requests
 import pyodbc
 import os
-import logging
+import json
+#import logging
 
 # Credentials and configurations
 CLIENT_ID = os.getenv('YOUR_CLIENT_ID')
@@ -17,7 +18,8 @@ DB_PASSWORD = os.getenv('SQL_PASSWORD')
 app = Flask(__name__)
 
 # Set up logging for better error tracking
-logging.basicConfig(level=logging.INFO)
+
+#logging.basicConfig(level=logging.INFO)
 
 # Database connection details using environment variables
 try:
@@ -29,7 +31,7 @@ try:
         'PWD=' + DB_PASSWORD
     )
 except pyodbc.Error as e:
-    logging.error(f"Database connection error: {e}")
+#    logging.error(f"Database connection error: {e}")
     exit(1)
 
 
@@ -42,7 +44,7 @@ def create_token():
             store_token_data(token_response)
             return jsonify({"message": "Token data inserted successfully"}), 201
         else:
-            logging.error("Failed to exchange authorization code.")
+#            logging.error("Failed to exchange authorization code.")
             return jsonify({"error": "Failed to exchange authorization code"}), 500
     return jsonify({"error": "Authorization code not provided"}), 400
 
@@ -54,7 +56,7 @@ def refresh_token(refresh_token):
         store_token_data(token_response)
         return jsonify({"message": "Token data refreshed successfully"}), 200
     else:
-        logging.error("Failed to refresh token.")
+#        logging.error("Failed to refresh token.")
         return jsonify({"error": "Failed to refresh token"}), 500
 
 
@@ -101,19 +103,19 @@ def exchange_code_for_token(code=None, refresh_token=None):
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
-        logging.error(f"Error during token request: {e}")
+#        logging.error(f"Error during token request: {e}")
         return None
 
 
 def store_token_data(token_data):
-    json_string = str(token_data)
+    json_string = json.dumps(token_data)
     try:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO TempJsonTable (JsonResponse) VALUES (?)", json_string)
         conn.commit()
-        logging.info("Token data inserted into TempJsonTable.")
+        print(f"Token data inserted into TempJsonTable:\n{token_data}")
     except pyodbc.Error as e:
-        logging.error(f"Database insert error: {e}")
+        print(f"Database insert error: {e}")
 
 
 if __name__ == '__main__':
