@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 # Set up logging for better error tracking
 
-#Logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 # Database connection details using environment variables
 try:
