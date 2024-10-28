@@ -113,7 +113,7 @@ def store_token_data(token_data):
         cursor = conn.cursor()
         cursor.execute("INSERT INTO TempJsonTable (JsonResponse) VALUES (?)", json_string)
         conn.commit()
-        logging.info(f"Token data inserted into TempJsonTable:\n{token_data}")
+        logging.info(f"Token data inserted into TempJsonTable: {token_data}")
     except pyodbc.Error as e:
         logging.error(f"Database insert error: {e}")
 
