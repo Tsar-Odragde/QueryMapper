@@ -60,22 +60,22 @@ def refresh_token(refresh_token):
         return jsonify({"error": "Failed to refresh token"}), 500
 
 
-# @app.route('/tokens', methods=['GET'])
-# def get_token():
-#     cursor = conn.cursor()
-#     cursor.execute("SELECT TOP 1 * FROM TokenData ORDER BY CreatedAt DESC")
-#     row = cursor.fetchone()
-#     if row:
-#         return jsonify({
-#             "user_id": row.UserId,
-#             "access_token": row.AccessToken,
-#             "refresh_token": row.RefreshToken,
-#             "expires_in": row.ExpiresIn,
-#             "scope": row.Scope,
-#             "token_type": row.TokenType,
-#             "created_at": row.CreatedAt
-#         }), 200
-#     return jsonify({"error": "No token data found"}), 404
+@app.route('/tokens', methods=['GET'])
+def get_token():
+    cursor = conn.cursor()
+    cursor.execute("SELECT TOP 1 * FROM TokenData ORDER BY CreatedAt DESC")
+    row = cursor.fetchone()
+    if row:
+        return jsonify({
+            "user_id": row.UserId,
+            "access_token": row.AccessToken,
+            "refresh_token": row.RefreshToken,
+            "expires_in": row.ExpiresIn,
+            "scope": row.Scope,
+            "token_type": row.TokenType,
+            "created_at": row.CreatedAt
+        }), 200
+    return jsonify({"error": "No token data found"}), 404
 
 
 def exchange_code_for_token(code=None, refresh_token=None):
