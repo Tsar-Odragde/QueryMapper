@@ -14,3 +14,5 @@ pyodbc==5.2.0
 requests==2.32.3
 urllib3==2.2.3
 Werkzeug==3.0.4
+python-dotenv==1.0.1
+

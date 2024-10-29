@@ -1,3 +1,6 @@
 app_keys.txt
 virtenv/
+linvenv/
+__pycache__/
 debugging.ipynb
+.env
