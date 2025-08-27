@@ -4,3 +4,5 @@ linvenv/
 __pycache__/
 debugging.ipynb
 .env
+sql/
+status.py
